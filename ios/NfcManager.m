@@ -4,6 +4,8 @@
 #import "React/RCTEventDispatcher.h"
 #import "React/RCTLog.h"
 
+//NSString whenTagDetected = @"Thank you!";
+
 NSString* getHexString(NSData *data) {
     NSUInteger capacity = data.length * 2;
     NSMutableString *sbuf = [NSMutableString stringWithCapacity:capacity];
@@ -167,6 +169,7 @@ RCT_EXPORT_MODULE()
         [self sendEventWithName:@"NfcManagerDiscoverTag"
                            body:@{@"ndefMessage": @[]}];
     }
+    //session.alertMessage = @"thank you";
 }
 
 - (void)readerSession:(NFCNDEFReaderSession *)session didInvalidateWithError:(NSError *)error
@@ -220,11 +223,20 @@ RCT_EXPORT_MODULE()
                     if (ndefMessage != nil) {
                         [self sendEventWithName:@"NfcManagerDiscoverTag"
                                            body:@{@"ndefMessage": [self convertNdefMessage:ndefMessage]}];
+                         session.alertMessage = @"Thank you!";
+                    }
+                    else{
+//                         session.alertMessage = @"no info";
+//                         [session invalidateSession];
+                        session.alertMessage = @"Thank you!";
+                         [self sendEventWithName:@"NfcManagerDiscoverTag"
+                        body:@{@"ndefMessage": @""}];
                     }
                 }];
             }];
         }
     }
+   
 }
 
 - (void)tagReaderSession:(NFCTagReaderSession *)session didDetectTags:(NSArray<__kindof id<NFCTag>> *)tags
